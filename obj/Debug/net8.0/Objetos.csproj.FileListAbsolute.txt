@@ -12,3 +12,4 @@ C:\Users\T-GAMER\Documents\Coisas do visual studio\apresentações\Objetos\obj\D
 C:\Users\T-GAMER\Documents\Coisas do visual studio\apresentações\Objetos\obj\Debug\net8.0\Objetos.pdb
 C:\Users\T-GAMER\Documents\Coisas do visual studio\apresentações\Objetos\obj\Debug\net8.0\Objetos.genruntimeconfig.cache
 C:\Users\T-GAMER\Documents\Coisas do visual studio\apresentações\Objetos\obj\Debug\net8.0\ref\Objetos.dll
+C:\Users\T-GAMER\Documents\Coisas do visual studio\apresentações\Objetos\obj\Debug\net8.0\Objetos.sourcelink.json
