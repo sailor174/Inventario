@@ -1,7 +1,7 @@
 ﻿using System.Reflection.Metadata;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks.Dataflow;
-using System.Timers;    
+using System.Timers;
 
 namespace Objetos
 {
@@ -20,7 +20,7 @@ namespace Objetos
         {
             Player player = new();
             List<Item> items = [];
-            
+
             items.Add(new Cure_potion("Health potion", 150));
             items.Add(new Cure_potion("Full health potion"));
             items.Add(new Resist_potion("Resist fire potion"));
@@ -72,18 +72,9 @@ namespace Objetos
                         break;
 
                     case ConsoleKey.I:
-                        Inventory.DisplayInventory();
+                      //  Inventory.DisplayInventory();
                         break;
                 }
-            }
-        }
-
-        public class Inventory
-        {
-            int capacity = 15;
-            public void AddItem()
-            {
-                foreach 
             }
         }
         public class Player
@@ -102,7 +93,7 @@ namespace Objetos
         }
 
         public class Item
-        { 
+        {
             public int Qty { get; set; }
             protected static int LastId { get; set; } = 0;
             protected int Max_qty { get; set; }
@@ -113,12 +104,12 @@ namespace Objetos
                 LastId++;
                 Id = LastId;
                 Qty = qty;
-                if(Qty > Max_qty)
+                if (Qty > Max_qty)
                 {
                     Qty = Max_qty;
                     Console.WriteLine("Limite de poções atingido");
                 }
-                if (Item)
+              //  if (Item.)
             }
             public virtual void Use()
             {
@@ -139,11 +130,11 @@ namespace Objetos
                 {
                     Player.Vida = Player.Vida_Max;
                     Console.WriteLine("Você usou a poção de cura total");
-                    Qty --;
+                    Qty--;
                 }
                 else
                 {
-                    Player.Vida += Strenght;      
+                    Player.Vida += Strenght;
                 }
             }
         }
@@ -172,5 +163,31 @@ namespace Objetos
                 }
             }
         }
+        public class Inventory
+        {
+            private List<Item> items;
+
+            public Inventory()
+            {
+                items = new List<Item>();
+            }
+
+            public bool AddItem(Item item)
+            {
+                if (items.Count >= 15)
+                {
+                    Console.WriteLine("Inventário cheio, não é possível adicionar mais itens.");
+                    return false;
+                }
+
+                else
+                {
+                    items.Add(item);
+                    Console.WriteLine($"Item {item.Name} adicionado ao inventário.");
+                    return true;
+                }
+            }
+        }
     }
 }
+
