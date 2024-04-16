@@ -18,15 +18,18 @@ namespace Objetos
         */
         public static void Main(string[] args)
         {
-            Player player = new();
+            Player player1 = new();
             List<Item> items = [];
 
-            items.Add(new Cure_potion("Health potion", 150));
-            items.Add(new Cure_potion("Full health potion"));
-            items.Add(new Resist_potion("Resist fire potion"));
-            items.Add(new Resist_potion("Resist shock potion"));
-            items.Add(new Resist_potion("Resist freeze potion"));
-            items.Add(new Resist_potion("antidote"));
+            items.Add(new Cure_potion("Health potion", 3, 150));
+            items.Add(new Cure_potion("Full health potion", 3));
+            items.Add(new Resist_potion("Resist fire potion", 3));
+            items.Add(new Resist_potion("Resist shock potion", 3));
+            items.Add(new Resist_potion("Resist freeze potion", 3));
+            items.Add(new Resist_potion("antidote", 3));
+            items.Add(new Trap("Shock trap", 3));
+            items.Add(new Trap("Detonating Blast Trap", 3));
+            items.Add(new Trap("Blast Trap", 3));
 
             int indiceAtual = 0;
             Console.WriteLine("Oque deseja fazer?\n[1] sepuko \n[Q-E] poção\n[I] inventário\n[spacebar] usar item");
@@ -41,9 +44,9 @@ namespace Objetos
                         break;
                     case ConsoleKey.D1:
                         Console.WriteLine("Quanto de vida deseja retirar?");
-                        player.seppuko();
-                        Console.WriteLine(Player.Vida);
-                        if (Player.Vida <= 0)
+                        player1.seppuko();
+                        Console.WriteLine(player1.Vida);
+                        if (player1.Vida <= 0)
                         {
                             Console.WriteLine("Você morreu");
                             return;
@@ -53,6 +56,7 @@ namespace Objetos
                         //verifica se é o ultimo ID
                         if (indiceAtual == items.Count - 1)
                         {
+                            //player.
                             //volta do topo
                             indiceAtual = -1;
                         }
@@ -72,23 +76,63 @@ namespace Objetos
                         break;
 
                     case ConsoleKey.I:
-                      //  Inventory.DisplayInventory();
+                        //  Inventory.DisplayInventory();
                         break;
                 }
             }
         }
         public class Player
         {
-            public static int Vida { get; set; } = 500;
-            public static int Vida_Max = 500;
+            public int Vida { get; set; } = 500;
+            public int Vida_Max = 500;
+            public Inventory[] Inventories { get; private set;}
             public Player()
             {
+                Inventories = new Inventory[1]; // Inicialize a propriedade Inventory com um novo inventário
+                Inventories[0] = new Inventory();
                 Vida = 500;
                 Vida_Max = 500;
             }
+
             public void seppuko()
             {
                 Vida -= int.Parse(Console.ReadLine());
+            }
+
+            public void Use(Item item)
+            {
+                if (item.Qty > 0)
+                {
+                    item.Qty--;
+
+                }
+            }
+        }
+        public class Inventory
+        {
+            public Item[] inventory = new Item[5];
+            private int Occupied = 0;
+            public void AddItem(Item item)
+            {
+                if (Occupied >= 5)
+                {
+                    Console.WriteLine("Inventário cheio, não é possível adicionar mais itens.");
+                }
+                else
+                {
+                    int loop = 0;
+                    while (loop >= 4)
+                    {
+                        if (inventory[loop].Qty == 0)
+                        {
+                            break;
+                        }
+                        loop++;
+                    }
+                    Occupied++;
+                    inventory[loop] = item;
+                    Console.WriteLine($"Item {item.Name} adicionado ao inventário.");
+                }
             }
         }
 
@@ -109,7 +153,6 @@ namespace Objetos
                     Qty = Max_qty;
                     Console.WriteLine("Limite de poções atingido");
                 }
-              //  if (Item.)
             }
             public virtual void Use()
             {
@@ -119,30 +162,19 @@ namespace Objetos
         public class Cure_potion : Item
         {
             public int Strenght { get; set; }
-            public Cure_potion(string name, int strenght = -1)
+            public Cure_potion(string name, int max, int strenght = -1)
             {
                 Strenght = strenght;
                 Name = name;
-            }
-            public void Use()
-            {
-                if (Strenght == -1)
-                {
-                    Player.Vida = Player.Vida_Max;
-                    Console.WriteLine("Você usou a poção de cura total");
-                    Qty--;
-                }
-                else
-                {
-                    Player.Vida += Strenght;
-                }
+                Max_qty = max;
             }
         }
         public class Resist_potion : Item
         {
-            public Resist_potion(string name)
+            public Resist_potion(string name, int max)
             {
                 Name = name;
+                Max_qty = max;
             }
             public void Use()
             {
@@ -163,28 +195,19 @@ namespace Objetos
                 }
             }
         }
-        public class Inventory
+        public class Trap : Item
         {
-            private List<Item> items;
-
-            public Inventory()
+            public Trap(string name, int max)
             {
-                items = new List<Item>();
+                Name = name;
+                Max_qty = max;
             }
 
-            public bool AddItem(Item item)
+            public void Use()
             {
-                if (items.Count >= 15)
+                switch (Name)
                 {
-                    Console.WriteLine("Inventário cheio, não é possível adicionar mais itens.");
-                    return false;
-                }
 
-                else
-                {
-                    items.Add(item);
-                    Console.WriteLine($"Item {item.Name} adicionado ao inventário.");
-                    return true;
                 }
             }
         }
