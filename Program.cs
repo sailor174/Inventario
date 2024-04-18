@@ -61,7 +61,7 @@ namespace Objetos
                         break;
 
                     case ConsoleKey.R:
-                        bool Loop = true; 
+                        bool Loop = true;
                         while (Loop)
                         {
                             ConsoleKeyInfo keyInf = Console.ReadKey(true);
@@ -91,6 +91,9 @@ namespace Objetos
                                     indiceAtual--;
                                     Console.WriteLine($"poção atual: {items[indiceAtual].Name}, ID: {items[indiceAtual].Id}");
                                     break;
+                                case ConsoleKey.Spacebar:
+                                    player1.inventory.AddItem(items[indiceAtual]);
+                                    break;
                                 case ConsoleKey.R:
                                     Loop = false;
                                     break;
@@ -99,7 +102,7 @@ namespace Objetos
                         break;
 
                     case ConsoleKey.I:
-                        //  Inventory.DisplayInventory();
+                        player1.inventory.DisplayInventory();
                         break;
                 }
             }
@@ -118,38 +121,36 @@ namespace Objetos
                 Vida_Max = 500;
                 SelectedItem = 1;
             }
-
             public void Next()
             {
                 Console.WriteLine("verificação externa");
-                if(inventory.inventory.Length != 0)
+                if (inventory.inventory.Length != 0)
                 {
                     Console.WriteLine("verificação interna");
-                
-                if (SelectedItem == 5)
-                {
-                    SelectedItem = 0;
-                }
-                int tentativas = 5;
-                while (inventory.inventory[SelectedItem].Qty == 0 && tentativas > 0)
-                {
-                    SelectedItem++;
-                    tentativas--;
-                    if (tentativas == 0 && inventory.inventory[SelectedItem].Qty == 0)
+
+                    if (SelectedItem == 5)
                     {
-                        Console.WriteLine("Sem nenhum item no inventario");
+                        SelectedItem = 0;
+                    }
+                    int tentativas = 5;
+                    while (inventory.inventory[SelectedItem].Qty == 0 && tentativas > 0)
+                    {
+                        SelectedItem++;
+                        tentativas--;
+                        if (tentativas == 0 && inventory.inventory[SelectedItem].Qty == 0)
+                        {
+                            Console.WriteLine("Sem nenhum item no inventario");
+                        }
+                    }
+                    if (inventory.inventory[SelectedItem].Qty > 0)
+                    {
+                        Console.WriteLine("Item Selecionado: " + inventory.inventory[SelectedItem].Name);
                     }
                 }
-                if (inventory.inventory[SelectedItem].Qty > 0)
-                {
-                    Console.WriteLine("Item Selecionado: " + inventory.inventory[SelectedItem].Name);
-                }
-                }
             }
-
             public void Back()
             {
-                if(inventory.inventory.Length == 0)
+                if (inventory.inventory.Length == 0)
                 {
                     return;
                 }
@@ -183,7 +184,7 @@ namespace Objetos
 
             public void Use()
             {
-                if (inventory.inventory.Length >= 1)
+                if (inventory.inventory.Length == 0)
                 {
                     if (inventory.inventory[SelectedItem].Qty <= 0)
                     {
@@ -224,6 +225,10 @@ namespace Objetos
                         }
                     }
                 }
+                else
+                {
+                    return;
+                }
             }
         }
         public class Inventory
@@ -249,12 +254,20 @@ namespace Objetos
                 inventory[slot] = item;
                 Console.WriteLine($"Item {item.Name} adicionado ao inventário.");
             }
+
+            public void DisplayInventory()
+            {
+                foreach (var item in inventory)
+                {
+                    Console.WriteLine("nome: " + item.Name);
+                }
+            }
         }
         public class Item
         {
             public int Qty { get; set; }
             protected static int LastId { get; set; } = 0;
-            protected int Max_qty { get; set; }
+            protected int Max_qty { get; set; } = 3;
             public virtual string Name { get; set; }
             public int Id { get; set; }
             public Item(int qty = 1)
